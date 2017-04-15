@@ -42,7 +42,7 @@ class Object:
 			print('[%10s] %s' % ('Error', 'Drive.upload()'))
 
 		# remove file
-		#os.remove(PATH + self.title)
+		os.remove(PATH + self.title)
 		#os.remove(PATH + self.title + '.zip')
 
 	def download(self):
