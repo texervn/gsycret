@@ -26,8 +26,10 @@
 ### Features
 - [X] Downlink
 - [X] Uplink
-- [] Encryption
-- [] Match (by hash)
+- [ ] Encryption
+- [ ] Match (by hash)
+- [ ] Error message
+- [ ] Log file
 
 ### Version
 V1.0
