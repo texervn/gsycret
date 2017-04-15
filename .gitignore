@@ -1,0 +1,5 @@
+# google api keys
+client_secrets.json
+
+# temp folder
+temp/*
