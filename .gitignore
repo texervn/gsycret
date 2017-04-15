@@ -5,5 +5,8 @@ mycreds.txt
 # config
 config.json
 
+# module
+module/*.pyc
+
 # temp folder
 temp/*
