@@ -1,5 +1,9 @@
 # google api keys
 client_secrets.json
+mycreds.txt
+
+# config
+config.json
 
 # temp folder
 temp/*
