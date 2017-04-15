@@ -42,9 +42,6 @@ def next():
 		time.sleep(1)
 
 def run():
-
-	print(THREADS_NUM)
-
 	# init
 	threads = []
 	for i in range(0, THREADS_NUM):
@@ -75,10 +72,11 @@ if __name__ == '__main__':
 	# init
 	Drive.auth()
 	
+	# match
 	matched = Drive.match(SOURCE, DESTINATION)
-
 	print('[%10s] %d files found' % ('Match', len(matched)))
 
+	# to queue
 	list(map(q.put, matched))
 
 	run()
