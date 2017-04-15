@@ -18,6 +18,7 @@
     
     * [ITO の 學習筆記](http://vito-note.blogspot.tw/2015/04/google-oauth-20.html)
 * Rename the json file from Google to ```client_secrets.json```
+* Rename ```config.json.exmple``` to ```config.json```
 * Run script
     ```
     python3 backup.py <source_folder_id> <destination_folder_id>
