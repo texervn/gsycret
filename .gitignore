@@ -6,7 +6,7 @@ mycreds.txt
 config.json
 
 # module
-module/*.pyc
+module/__pycache/
 
 # temp folder
 temp/*
