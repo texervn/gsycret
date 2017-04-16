@@ -14,9 +14,6 @@ class Object:
 		self.id = var['id']
 		self.title = var['title']
 		self.parents = var['parents']
-
-		# remove file
-		os.remove(PATH + self.title)
 		
 	def download(self):
 		print('[%10s] %s' % ('Download', self.title))
@@ -28,6 +25,9 @@ class Object:
 		file = drive.CreateFile({"title": self.title, "parents": [{"kind": "drive#fileLink", "id": self.parents[0]['id']}]})
 		file.SetContentFile(PATH + self.title)
 		file.Upload()
+
+		# remove useless
+		os.remove(PATH + self.title)
 
 # OAuth
 def auth():
