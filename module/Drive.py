@@ -1,5 +1,4 @@
 import os
-import queue
 import subprocess
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
@@ -16,43 +15,13 @@ class Object:
 		self.title = var['title']
 		self.parents = var['parents']
 
-	def run(self):
-		# download
-		try:
-			self.download()
-		except Exception as e:
-			print(e)
-			print('[%10s] %s' % ('Error', 'Drive.download()'))
-			return
-
-		"""
-		# encrypt
-		if (ENCRYPTION):
-			try:
-				self.encrypt()
-			except:
-				print('[%10s] %s' % ('Error', 'Drive.encrypt()'))
-				return
-		"""
-		
-		# upload
-		try:
-			self.upload()
-		except:
-			print('[%10s] %s' % ('Error', 'Drive.upload()'))
-
 		# remove file
 		os.remove(PATH + self.title)
-		#os.remove(PATH + self.title + '.zip')
-
+		
 	def download(self):
 		print('[%10s] %s' % ('Download', self.title))
 		file = drive.CreateFile({'id': self.id})
 		file.GetContentFile(PATH + self.title)
-
-	def encrypt(self):
-		print('[%10s] %s' % ('Encrypt', self.title))
-		subprocess.call(['zip', '--password', PATH + self.parents[0]['id'], PATH + self.title + '.zip', PATH + self.title])
 
 	def upload(self):
 		print('[%10s] %s' % ('Upload', self.title))
