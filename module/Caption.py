@@ -39,15 +39,10 @@ def match_caption(video, captions):
 def srt_to_ass(var):
 	title = var.replace('.srt', '')
 	subprocess.call(['ffmpeg', '-i', PATH + var, PATH + title + '.ass'])
+	os.remove(var)
 
-def hardcode(video):
+def hardcode(video, caption):
 	# init
 	title = video[:video.rfind('.')]
-
-	caption = match_caption(title)
-
-	if caption == None:
-		print('[%10s] %s' % ('Error', 'Caption not found'))
-		return
 
 	subprocess.call(['ffmpeg', '-i', video, '-vf', 'ass=' + caption, '-strict', '-2', title + '-s.mp4'])
