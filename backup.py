@@ -12,11 +12,9 @@ from pydrive.drive import GoogleDrive
 
 # customized module
 from module import Drive
-from module import Caption
 
 # constant
 PATH = os.path.dirname(os.path.abspath(__file__))
-TEMP_PATH = PATH + '/temp/'
 
 # global var
 ENCRYPTION = None
@@ -37,37 +35,19 @@ def load_config():
 
 	return (ENCRYPTION, THREADS_NUM)
 
-def lsl():
-	return [x for x in listdir(TEMP_PATH) if isfile(join(TEMP_PATH, x))]
-
-
 def next():
 	while q.qsize() > 0:
 		obj = q.get()
 		
-		# download
 		try:
 			obj.download()
-		except Exception as e:
-			print(e)
-			print('[%10s] %s' % ('Error', 'Drive.download()'))
-			return
+		except:
+			print('[%10s] %s' % ('Error', 'Download'))
 
-		"""
-		# encrypt
-		if (ENCRYPTION):
-			try:
-				obj.encrypt()
-			except:
-				print('[%10s] %s' % ('Error', 'Drive.encrypt()'))
-				return
-		"""
-		
-		# upload
 		try:
 			obj.upload()
 		except:
-			print('[%10s] %s' % ('Error', 'Drive.upload()'))
+			print('[%10s] %s' % ('Error', 'Upload'))
 
 		time.sleep(1)
 
@@ -88,14 +68,13 @@ def run():
 
 if __name__ == '__main__':
 	# check input
-	if len(sys.argv) != 4:
-		print('[%10s] %s %s' % ('Usage', '<backup | caption>', '<source>', '<destination>'))
+	if len(sys.argv) != 3:
+		print('[%10s] %s %s' % ('Usage', '<source>', '<destination>'))
 		exit()
 
 	# var
-	OPERATION = sys.argv[1]
-	SOURCE = sys.argv[2]
-	DESTINATION = sys.argv[3]
+	SOURCE = sys.argv[1]
+	DESTINATION = sys.argv[2]
 
 	# load config
 	ENCRYPTION, THREADS_NUM = load_config()
