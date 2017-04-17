@@ -4,6 +4,7 @@ mycreds.txt
 
 # config
 config.json
+config.json.example
 
 # module
 module/__pycache__/
