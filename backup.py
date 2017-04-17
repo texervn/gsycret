@@ -42,8 +42,8 @@ def next():
 		
 		try:
 			obj.download()
-		except:
-			print('[%10s] %s' % ('Error', 'Drive.download()'))
+		except Exception as e:
+			print('[%10s] %s' % ('Error', str(e)))
 
 		if ENCRYPTION:
 			try:
@@ -52,12 +52,12 @@ def next():
 				#Encryption.decrypt(obj.title, obj.parents[0]['id'])
 				#obj.title = obj.title[:obj.title.rfind('.')]
 			except:
-				print('[%10s] %s' % ('Error', 'Encryption.encrypt()'))
+				print('[%10s] %s' % ('Error', str(e)))
 
 		try:
 			obj.upload()
-		except:
-			print('[%10s] %s' % ('Error', 'Drive.upload()'))
+		except Exception as e:
+			print('[%10s] %s' % ('Error', str(e)))
 
 		time.sleep(1)
 
