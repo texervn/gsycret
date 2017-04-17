@@ -7,7 +7,7 @@ PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)) 
 def encrypt(file, password):
 	print('[%10s] %s' % ('Encrypt', file))
 	print('ENCODE %s %s' % (file, password))
-	subprocess.call(['zip', '--password', password, PATH + file + '.zip', PATH + file])
+	subprocess.call(['zip', '-q', '-j', '--password', password, PATH + file + '.zip', PATH + file])
 	os.remove(PATH + file)
 
 def decrypt(file, password):
