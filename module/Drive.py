@@ -14,6 +14,7 @@ class Object:
 		self.id = var['id']
 		self.title = var['title']
 		self.parents = var['parents']
+		self.destination = var['destination']
 		
 	def download(self):
 		print('[%10s] %s' % ('Download', self.title))
@@ -22,7 +23,7 @@ class Object:
 
 	def upload(self):
 		print('[%10s] %s' % ('Upload', self.title))
-		file = drive.CreateFile({"title": self.title, "parents": [{"kind": "drive#fileLink", "id": self.parents[0]['id']}]})
+		file = drive.CreateFile({"title": self.title, "parents": [{"kind": "drive#fileLink", "id": self.destination}]})
 		file.SetContentFile(PATH + self.title)
 		file.Upload()
 
@@ -80,8 +81,7 @@ def match(source, dst):
 				matched.extend(match(i['id'], temp['id']))
 		# not folder
 		elif i['title'] not in dst_titles:
-			i['parents'] = [{"kind": "drive#fileLink", "id": dst}]
-			#print(i)
+			i['destination'] = dst
 			matched.append(Object(i))
 
 	return matched

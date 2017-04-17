@@ -12,6 +12,7 @@ from pydrive.drive import GoogleDrive
 
 # customized module
 from module import Drive
+from module import Encryption
 
 # constant
 PATH = os.path.dirname(os.path.abspath(__file__))
@@ -42,12 +43,21 @@ def next():
 		try:
 			obj.download()
 		except:
-			print('[%10s] %s' % ('Error', 'Download'))
+			print('[%10s] %s' % ('Error', 'Drive.download()'))
+
+		if ENCRYPTION:
+			try:
+				Encryption.encrypt(obj.title, obj.destination)
+				obj.title += '.zip'
+				#Encryption.decrypt(obj.title, obj.parents[0]['id'])
+				#obj.title = obj.title[:obj.title.rfind('.')]
+			except:
+				print('[%10s] %s' % ('Error', 'Encryption.encrypt()'))
 
 		try:
 			obj.upload()
 		except:
-			print('[%10s] %s' % ('Error', 'Upload'))
+			print('[%10s] %s' % ('Error', 'Drive.upload()'))
 
 		time.sleep(1)
 
