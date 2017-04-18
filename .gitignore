@@ -3,7 +3,7 @@ client_secrets.json
 mycreds.txt
 
 # config
-config.json
+*.json
 config.json.example
 
 # module
