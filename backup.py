@@ -18,28 +18,24 @@ from module import Encryption
 PATH = os.path.dirname(os.path.abspath(__file__))
 
 # global var
+CASE = None
 ENCRYPTION = None
 THREADS_NUM = None
 q = queue.Queue()
 
-def load_config():
-	# load configuration
+def load_config(file):
 	try:
-		with open(PATH + '/config.json', 'r') as file:
-			para = json.load(file)
-
-		ENCRYPTION = para['encryption']
-		THREADS_NUM = para['threads_num']
+		with open(PATH + '/' + file, 'r') as config:
+			para = json.load(config)
+			return para
 	except:
-		print('[%10s] %s' % ('Error', 'Missing config.json'))
+		print('[%10s] %s' % ('Error', 'load_config()'))
 		exit()
 
-	return (ENCRYPTION, THREADS_NUM)
-
-def next():
+def merge():
 	while q.qsize() > 0:
 		obj = q.get()
-		
+
 		try:
 			obj.download()
 		except Exception as e:
@@ -61,6 +57,31 @@ def next():
 
 		time.sleep(1)
 
+def push():
+	while q.qsize() > 0:
+		obj = q.get()
+
+		if ENCRYPTION:
+			try:
+				Encryption.encrypt(obj.title, obj.destination)
+				obj.title += '.zip'
+			except:
+				print('[%10s] %s' % ('Error', str(e)))
+
+		try:
+			obj.upload()
+		except Exception as e:
+			print('[%10s] %s' % ('Error', str(e)))
+
+		time.sleep(1)
+
+def next():
+	
+	if CASE == 'merge':
+		merge()
+	elif CASE == 'push':
+		push()
+
 def run():
 	# init
 	threads = []
@@ -77,24 +98,36 @@ def run():
 		time.sleep(1)
 
 if __name__ == '__main__':
-	# check input
-	if len(sys.argv) != 3:
-		print('[%10s] %s %s' % ('Usage', '<source>', '<destination>'))
-		exit()
-
 	# var
-	SOURCE = sys.argv[1]
-	DESTINATION = sys.argv[2]
+	tasks = []
+	source = None
+	destination = None
 
 	# load config
-	ENCRYPTION, THREADS_NUM = load_config()
+	config = load_config('config.json')
+	ENCRYPTION, THREADS_NUM = config['encryption'], config['threads_num']
+
+	# check argv
+	if len(sys.argv) == 1:
+		tasks = load_config('backup.json')	
+	elif len(sys.argv) == 3:
+		tasks = [{
+			"name": "Default",
+			"source": sys.argv[1],
+			"destination": sys.argv[2]
+		}]
+	else:
+		print('[%10s] %s' % ('Usage', '<source> <destination>'))
+		exit()
 
 	# init
 	Drive.auth()
-	
-	# match
-	matched = Drive.match(SOURCE, DESTINATION)
-	print('[%10s] %d files found' % ('Match', len(matched)))
+
+	for task in tasks:
+		# match
+		CASE = 'push'
+		matched = Drive.push(task['source'], task['destination'])
+		print('[%10s] %d files found' % ('Match', len(matched)))
 
 	# to queue
 	list(map(q.put, matched))
