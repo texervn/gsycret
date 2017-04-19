@@ -1,10 +1,8 @@
 # google api keys
-client_secrets.json
 mycreds.txt
 
 # config
 *.json
-config.json.example
 
 # module
 module/__pycache__/
