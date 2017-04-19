@@ -1,15 +1,7 @@
 import os
 import sys
-import time
 import json
-import queue
 import argparse
-import threading
-import subprocess
-from os import listdir
-from os.path import isfile, join
-from pydrive.auth import GoogleAuth
-from pydrive.drive import GoogleDrive
 
 # custom module
 from module import Drive
@@ -25,11 +17,11 @@ def parse_argv():
 
 	# add argument
 	parser.add_argument('-m', help='choose operation', choices=('push', 'pull', 'merge'))
-	parser.add_argument('-s', action='store', help='source')
-	parser.add_argument('-d', action='store', help='destination')
+	parser.add_argument('-s', action='store', help='source folder')
+	parser.add_argument('-d', action='store', help='destination folder')
 	parser.add_argument('-p', action='store', help='password')
-	parser.add_argument('-a', action='store_true', help='auto encryption', default=False)
-	parser.add_argument('-t', action='store', help='threads_num', type=int, default=4)
+	parser.add_argument('-a', action='store_true', help='auto encrypt', default=False)
+	parser.add_argument('-t', action='store', help='number of threads', type=int, default=4)
 	results = parser.parse_args()
 	
 	return {
@@ -47,19 +39,13 @@ def load_config(file):
 		with open(PATH + '/' + file, 'r') as config:
 			para = json.load(config)
 			return para
-	except:
-		print('[%10s] %s' % ('Error', 'load_config()'))
+	except Exception as e:
+		print('[%10s] %s' % ('Error', str(e)))
 		exit()
 
 if __name__ == '__main__':
 	# var
 	tasks = []
-	source = None
-	destination = None
-
-	# load config
-	config = load_config('config.json')
-	Thread.ENCRYPTION, Thread.THREADS_NUM = config['encryption'], config['threads_num']
 
 	# check argv
 	if len(sys.argv) == 1:
@@ -75,16 +61,16 @@ if __name__ == '__main__':
 		matched = []
 
 		# init
-		if task['mode'] == 'push':
-			matched = Drive.push(task['source'], task['destination'])
-		elif task['mode'] == 'pull':
-			matched = Drive.pull(task['source'], task['destination'])
-		elif task['mode'] == 'merge':
-			matched = Drive.merge(task['source'], task['destination'])
+		matched = getattr(Drive, task['mode'])(task['source'], task['destination'])
 		
 		print('[%10s] %d files found' % ('Match', len(matched)))
 
 		# to queue
 		list(map(Thread.q.put, matched))
 
-		Thread.run(getattr(Thread.Object, task['mode']))
+		Thread.run({
+			'mode': task['mode'],
+			'auto': task['auto'],
+			'password': task['password'],
+			'threads_num': task['threads_num']
+		})
