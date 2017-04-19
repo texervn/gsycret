@@ -5,9 +5,6 @@ from os.path import join
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 
-# constant
-PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)) + '/temp/'
-
 # global var
 drive = None
 
@@ -16,19 +13,19 @@ class Object:
 		self.id = var['id']
 		self.path = var['path']
 		self.title = var['title']
-		self.parents = var['parents']
+		self.password = var['password']
 		self.destination = var['destination']
 		
-	def download(self):
-		print('[%10s] %s' % ('Download', self.title))
-		file = drive.CreateFile({'id': self.id})
-		file.GetContentFile(self.path + self.title)
+def download(var):
+	print('[%10s] %s' % ('Download', var.title))
+	file = drive.CreateFile({'id': var.id})
+	file.GetContentFile(var.path + var.title)
 
-	def upload(self):
-		print('[%10s] %s' % ('Upload', self.title))
-		file = drive.CreateFile({"title": self.title, "parents": [{"kind": "drive#fileLink", "id": self.destination}]})
-		file.SetContentFile(self.path + self.title)
-		file.Upload()
+def upload(var):
+	print('[%10s] %s' % ('Upload', var.title))
+	file = drive.CreateFile({"title": var.title, "parents": [{"kind": "drive#fileLink", "id": var.destination}]})
+	file.SetContentFile(var.path + var.title)
+	file.Upload()
 
 # OAuth
 def auth():
