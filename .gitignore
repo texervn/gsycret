@@ -6,3 +6,6 @@ mycreds.txt
 
 # module
 module/__pycache__/
+
+# temp folder
+temp/*
