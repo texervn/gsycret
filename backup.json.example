@@ -1,12 +1,11 @@
 [
 	{
 		"name": "Task1",
+		"mode": "push",
 		"source": "",
-		"destination": ""
-	},
-	{
-		"name": "Task2",
-		"source": "",
-		"destination": ""
+		"destination": "",
+		"password": "",
+		"auto": 0,
+		"threads_num": 4
 	}
 ]
