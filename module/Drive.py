@@ -11,20 +11,19 @@ drive = None
 class Object:
 	def __init__(self, var):
 		self.id = var['id']
-		self.path = var['path']
 		self.title = var['title']
-		self.password = var['password']
+		self.source = var['source']
 		self.destination = var['destination']
 		
 def download(var):
 	print('[%10s] %s' % ('Download', var.title))
 	file = drive.CreateFile({'id': var.id})
-	file.GetContentFile(var.path + var.title)
+	file.GetContentFile(var.destination + var.title)
 
 def upload(var):
 	print('[%10s] %s' % ('Upload', var.title))
 	file = drive.CreateFile({"title": var.title, "parents": [{"kind": "drive#fileLink", "id": var.destination}]})
-	file.SetContentFile(var.path + var.title)
+	file.SetContentFile(var.source + var.title)
 	file.Upload()
 
 # OAuth
@@ -66,8 +65,8 @@ def merge(source, destination):
 	for i in s_files:
 		# folder
 		if i['mimeType'] == 'application/vnd.google-apps.folder':
-			if any(j for j in d_files if j['title'] == i):
-				temp = next(j for j in d_files if j['title'] == i)
+			if any(j for j in d_files if j['title'] == i['title']):
+				temp = next(j for j in d_files if j['title'] == i['title'])
 				matched.extend(merge(i['id'], temp['id']))
 			else:
 				# create folder
@@ -75,10 +74,13 @@ def merge(source, destination):
 				temp.Upload()
 				matched.extend(merge(i['id'], temp['id']))
 		# not folder
-		elif not any(j for j in d_files if j['title'] == i):
-			i['path'] = PATH
-			i['destination'] = destination
-			matched.append(Object(i))
+		elif not any(j for j in d_files if j['title'] == i['title']):
+			matched.append(Object({
+				'id': i['id'],
+				'title': i['title'],
+				'source': destination,
+				'destination': os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)) + '/temp/'
+			}))
 
 	return matched
 
@@ -100,17 +102,15 @@ def push(source, destination):
 				# create folder
 				temp = drive.CreateFile({'title': i, "parents":  [{"id": destination}], "mimeType": "application/vnd.google-apps.folder"})
 				temp.Upload()
-				print(os.path.join(source, i))
 				matched.extend(push(os.path.join(source, i), temp['id']))
 		# is file
 		else:
 			if not any(j for j in d_files if j['title'] == i):
 				matched.append(Object({
-					"id": "",
-					"path": source + '/',
-					"title": i,
-					"parents": destination,
-					"destination": destination
+					'id': '',
+					'title': i,
+					'source': source + '/',
+					'destination': destination
 				}))
 
 	return matched
@@ -137,11 +137,10 @@ def pull(source, destination):
 		# not folder
 		elif not any(j for j in d_files if j == i['title'] and not os.path.isdir(os.path.join(destination, j))):
 			matched.append(Object({
-				"id": i['id'],
-				"path": destination + '/',
-				"title": i['title'],
-				"parents": source,
-				"destination": destination
+				'id': i['id'],
+				'title': i['title'],
+				'source': i['parents'][0]['id'],
+				'destination': destination + '/'
 			}))
 
 	return matched
