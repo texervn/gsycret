@@ -6,16 +6,13 @@ import threading
 from . import Drive
 from . import Encryption
 
-# constant
-ENCRYPTION = None
-THREADS_NUM = None
-
 # global var
 q = queue.Queue()
 
 class Object:
-	def merge():
+	def merge(var):
 		while q.qsize() > 0:
+			# init
 			obj = q.get()
 
 			try:
@@ -23,14 +20,13 @@ class Object:
 			except Exception as e:
 				print('[%10s] %s' % ('Error', str(e)))
 
-			if ENCRYPTION:
+			if var['auto'] or var['password']:
 				try:
-					Encryption.encrypt(obj.title, obj.destination)
+					Encryption.encrypt(obj, obj.destination if var['auto'] else var['password'])
 					obj.title += '.zip'
-					#Encryption.decrypt(obj.title, obj.parents[0]['id'])
-					#obj.title = obj.title[:obj.title.rfind('.')]
 				except:
 					print('[%10s] %s' % ('Error', str(e)))
+
 
 			try:
 				Drive.upload(obj)
@@ -39,13 +35,14 @@ class Object:
 
 			time.sleep(1)
 
-	def push():
+	def push(var):
 		while q.qsize() > 0:
+			# init
 			obj = q.get()
 
-			if ENCRYPTION:
+			if var['auto'] or var['password']:
 				try:
-					Encryption.encrypt(obj, obj.destination)
+					Encryption.encrypt(obj, obj.destination if var['auto'] else var['password'])
 					obj.title += '.zip'
 				except Exception as e:
 					print('[%10s] %s' % ('Error', str(e)))
@@ -57,8 +54,9 @@ class Object:
 
 			time.sleep(1)
 
-	def pull():
+	def pull(var):
 		while q.qsize() > 0:
+			# init
 			obj = q.get()
 
 			try:
@@ -66,13 +64,23 @@ class Object:
 			except Exception as e:
 				print('[%10s] %s' % ('Error', str(e)))
 
+			if var['auto'] or var['password']:
+				try:
+					Encryption.decrypt(obj, obj.source if var['auto'] else var['password'])
+					obj.title = obj.title[:obj.title.rfind('.')]
+				except Exception as e:
+					print('[%10s] %s' % ('Error', str(e)))
+
 			time.sleep(1)
 
 def run(var):
 	# init
 	threads = []
-	for i in range(0, THREADS_NUM):
-		t = threading.Thread(target=var, name='T' + str(i))
+	for i in range(0, var['threads_num']):
+		t = threading.Thread(name='T' + str(i), target=getattr(Object, var['mode'])({
+			'auto': var['auto'],
+			'password': var['password']
+		}))
 		threads.append(t)
 
 	# run
