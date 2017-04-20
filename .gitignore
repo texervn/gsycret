@@ -1,5 +1,5 @@
-# google api keys
-mycreds.txt
+# google private key
+*.p12
 
 # config
 *.json
