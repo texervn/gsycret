@@ -16,7 +16,7 @@ def parse_argv():
 	parser = argparse.ArgumentParser()
 
 	# add argument
-	parser.add_argument('-m', help='choose operation', choices=('push', 'pull', 'merge'))
+	parser.add_argument('-m', help='mode choices', choices=('push', 'pull', 'merge'))
 	parser.add_argument('-s', action='store', help='source folder')
 	parser.add_argument('-d', action='store', help='destination folder')
 	parser.add_argument('-p', action='store', help='password')

@@ -33,24 +33,18 @@ def auth():
 	# var
 	global drive
 
-	# OAuth
-	gauth = GoogleAuth()
-	gauth.LoadCredentialsFile('mycreds.txt')
+	# init
+	try:
+		gauth = GoogleAuth(settings_file='settings.yaml')
+	except Exception as e:
+		print('[%10s] %s %s' % ('Error', 'Drive.auth()', str(e)))
+		exit()
 
-	# load failed
-	if gauth.credentials is None:
-		gauth.LocalWebserverAuth()
-	# refresh if expired
-	elif gauth.access_token_expired:
-		try:
-			gauth.Refresh()
-		except:
-			gauth.LocalWebserverAuth()
-	else:
-		gauth.Authorize()
-
-	# save current credentials
-	gauth.SaveCredentialsFile('mycreds.txt')
+	try:
+		gauth.ServiceAuth()
+	except Exception as e:
+		print('[%10s] %s %s' % ('Error', 'Drive.auth()', str(e)))
+		exit()
 
 	drive = GoogleDrive(gauth)
 
