@@ -1,3 +1,4 @@
+import os
 import time
 import queue
 import threading
@@ -20,16 +21,24 @@ class Object:
 			except Exception as e:
 				print('[%10s] %s' % ('Error', str(e)))
 
+			# swap
+			obj.source, obj.destination = obj.destination, obj.source
+
 			if var['auto'] or var['password']:
 				try:
 					Encryption.encrypt(obj, obj.destination if var['auto'] else var['password'])
 					obj.title += '.zip'
-				except:
-					print('[%10s] %s' % ('Error', str(e)))
 
+					# test
+					os.remove(obj.source + obj.title[:obj.title.rfind('.')])
+				except Exception as e:
+					print('[%10s] %s' % ('Error', str(e)))
 
 			try:
 				Drive.upload(obj)
+
+				# test
+				os.remove(obj.source + obj.title)
 			except Exception as e:
 				print('[%10s] %s' % ('Error', str(e)))
 
@@ -52,8 +61,6 @@ class Object:
 			except Exception as e:
 				print('[%10s] %s' % ('Error', str(e)))
 
-			time.sleep(1)
-
 	def pull(var):
 		while q.qsize() > 0:
 			# init
@@ -71,16 +78,25 @@ class Object:
 				except Exception as e:
 					print('[%10s] %s' % ('Error', str(e)))
 
-			time.sleep(1)
+def next(mode, auto, password):
+	# var
+	var = {
+		'auto': auto,
+		'password': password
+	}
+
+	if mode == 'push':
+		return Object.push(var)
+	elif mode == 'merge':
+		return Object.merge(var)
+	elif mode == 'pull':
+		return Object.pull(var)
 
 def run(var):
 	# init
 	threads = []
 	for i in range(0, var['threads_num']):
-		t = threading.Thread(name='T' + str(i), target=getattr(Object, var['mode'])({
-			'auto': var['auto'],
-			'password': var['password']
-		}))
+		t = threading.Thread(name='T' + str(i), target=next, args=(var['mode'], var['auto'], var['password']))
 		threads.append(t)
 
 	# run

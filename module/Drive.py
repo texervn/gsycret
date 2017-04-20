@@ -74,7 +74,7 @@ def merge(source, destination):
 				temp.Upload()
 				matched.extend(merge(i['id'], temp['id']))
 		# not folder
-		elif not any(j for j in d_files if j['title'] == i['title']):
+		elif not any(j for j in d_files if j['title'] == i['title'] or j['title'][:j['title'].rfind('.')] == i['title']):
 			matched.append(Object({
 				'id': i['id'],
 				'title': i['title'],
