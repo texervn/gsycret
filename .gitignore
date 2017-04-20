@@ -3,6 +3,7 @@ mycreds.txt
 
 # config
 *.json
+*.yaml
 
 # module
 module/__pycache__/
