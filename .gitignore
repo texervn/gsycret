@@ -1,9 +1,9 @@
-# google private key
-*.p12
+# google key
+client_secrets.json
+mycreds.txt
 
 # config
 *.json
-*.yaml
 
 # module
 module/__pycache__/

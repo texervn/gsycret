@@ -33,7 +33,7 @@ def parse_argv():
 		'password': results.p,
 		'auto': results.a,
 		'threads_num': results.t,
-		'remote': result.r
+		'remote': results.r
 	}
 
 def load_config(file):
@@ -55,12 +55,12 @@ if __name__ == '__main__':
 	else:
 		tasks = [parse_argv()]
 
-	# init
-	Drive.auth(task['remote'])
-
 	for task in tasks:
 		# var
 		matched = []
+
+		# auth
+		Drive.auth(task['remote'])
 
 		# init
 		matched = getattr(Drive, task['mode'])(task['source'], task['destination'])
