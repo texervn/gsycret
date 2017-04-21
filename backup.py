@@ -22,6 +22,7 @@ def parse_argv():
 	parser.add_argument('-p', action='store', help='password')
 	parser.add_argument('-a', action='store_true', help='auto encrypt', default=False)
 	parser.add_argument('-t', action='store', help='number of threads', type=int, default=4)
+	parser.add_argument('-r', action='store_true', help='remote auth', default=False)
 	results = parser.parse_args()
 	
 	return {
@@ -31,7 +32,8 @@ def parse_argv():
 		'destination': results.d,
 		'password': results.p,
 		'auto': results.a,
-		'threads_num': results.t
+		'threads_num': results.t,
+		'remote': result.r
 	}
 
 def load_config(file):
@@ -54,7 +56,7 @@ if __name__ == '__main__':
 		tasks = [parse_argv()]
 
 	# init
-	Drive.auth()
+	Drive.auth(task['remote'])
 
 	for task in tasks:
 		# var
