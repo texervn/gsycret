@@ -27,8 +27,8 @@ def upload(var):
 	file.Upload()
 
 # OAuth
-def auth(var):
-	print('[%10s] %s' % ('Auth', 'Google API'))
+def auth():
+	print('[%10s] %s' % ('OAuth', 'Start'))
 
 	# var
 	global drive
@@ -53,6 +53,8 @@ def auth(var):
 	gauth.SaveCredentialsFile('mycreds.txt')
 
 	drive = GoogleDrive(gauth)
+
+	print('[%10s] %s' % ('OAuth', 'Done'))
 
 
 def merge(source, destination):
