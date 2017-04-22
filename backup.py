@@ -19,8 +19,8 @@ def parse_argv():
 	parser.add_argument('-m', help='mode choices', choices=('push', 'pull', 'merge'))
 	parser.add_argument('-s', action='store', help='source folder')
 	parser.add_argument('-d', action='store', help='destination folder')
-	parser.add_argument('--password', action='store', help='password')
-	parser.add_argument('--auto', action='store_true', help='auto encrypt', default=False)
+	parser.add_argument('--password', action='store', help='password for {encrypt,decrypt}')
+	parser.add_argument('--auto', action='store_true', help='auto {encrypt,decrypt} files by parent google_folder_id', default=False)
 	parser.add_argument('--threads_num', action='store', help='number of threads', type=int, default=4)
 	results = parser.parse_args()
 	
