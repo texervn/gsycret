@@ -1,4 +1,4 @@
-# gdrive-scripts
+# gsycret
 > Scripts for syncing files between personal computer and google drive
 
 ### Requirement
@@ -15,16 +15,25 @@
     ```
     cd gdrive-scripts
     ```
-* Get Google Drive API key
-    > Please reference the following links
-
-    * [ITO の 學習筆記](http://vito-note.blogspot.tw/2015/04/google-oauth-20.html)
+* Apply and download Google Drive API key
 * Rename the json file from Google to ```client_secrets.json```
 
 ### Usages
-```
-python3 backup.py [-h] [-m {push,pull,merge}] [-s S] [-d D] [-p P] [-a] [-t T]
-```
+##### Basic  
+* push
+    ```
+        python3 backup.py -m push -s /home/$USER -d <google_folder_id>
+    ```
+* pull
+    ```
+    python3 backup.py -m pull -s <google_folder_id> -d /home/$USER
+    ```
+* merge
+    ```
+    python3 backup.py -m merge -s <google_folder_id> -d <google_folder_id>
+    ```
+
+##### Advanced
 
 | Arguments | Help | Others |
 | ----- | ----- | ----- |
@@ -32,9 +41,9 @@ python3 backup.py [-h] [-m {push,pull,merge}] [-s S] [-d D] [-p P] [-a] [-t T]
 | -m {push,pull,merge} | mode choices | |
 | -s S | source folder | |
 | -d D | destination folder | |
-| -p P | password | Optional |
-| -a | auto encrypt | Optional |
-| -t T | number of threads | Optional, Default = 4 |
+| --password PASSWORD | password for {encrypt,decrypt} | Optional |
+| --auto | auto {encrypt,decrypt} files by parent google_folder_id | Optional |
+| --threads_num THREADS_NUM | number of threads | Optional, Default = 4 |
 
 ### Features
 - [X] push
@@ -45,7 +54,6 @@ python3 backup.py [-h] [-m {push,pull,merge}] [-s S] [-d D] [-p P] [-a] [-t T]
     - [X] with file name
     - [ ] with hash
 - [X] error message
-- [ ] log file
 
 ### Version
 V1.3
