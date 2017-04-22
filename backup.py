@@ -19,9 +19,9 @@ def parse_argv():
 	parser.add_argument('-m', help='mode choices', choices=('push', 'pull', 'merge'))
 	parser.add_argument('-s', action='store', help='source folder')
 	parser.add_argument('-d', action='store', help='destination folder')
-	parser.add_argument('-p', action='store', help='password')
-	parser.add_argument('-a', action='store_true', help='auto encrypt', default=False)
-	parser.add_argument('-t', action='store', help='number of threads', type=int, default=4)
+	parser.add_argument('--password', action='store', help='password')
+	parser.add_argument('--auto', action='store_true', help='auto encrypt', default=False)
+	parser.add_argument('--threads_num', action='store', help='number of threads', type=int, default=4)
 	results = parser.parse_args()
 	
 	return {
@@ -29,9 +29,9 @@ def parse_argv():
 		'mode': results.m,
 		'source': results.s,
 		'destination': results.d,
-		'password': results.p,
-		'auto': results.a,
-		'threads_num': results.t
+		'password': results.password,
+		'auto': results.auto,
+		'threads_num': results.threads_num
 	}
 
 def load_config(file):
@@ -53,17 +53,17 @@ if __name__ == '__main__':
 	else:
 		tasks = [parse_argv()]
 
-	# init
-	Drive.auth()
-
 	for task in tasks:
 		# var
 		matched = []
 
+		# auth
+		Drive.auth()
+
 		# init
+		print('[%10s] %s' % ('Match', 'Start'))
 		matched = getattr(Drive, task['mode'])(task['source'], task['destination'])
-		
-		print('[%10s] %d files found' % ('Match', len(matched)))
+		print('[%10s] %s' % ('Match', '%d files found' % len(matched)))
 
 		# to queue
 		list(map(Thread.q.put, matched))

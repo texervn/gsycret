@@ -36,13 +36,12 @@ class Object:
 
 			try:
 				Drive.upload(obj)
-
-				# test
+				# testing
 				os.remove(obj.source + obj.title)
 			except Exception as e:
 				print('[%10s] %s' % ('Error', str(e)))
 
-			time.sleep(1)
+			print('[%10s] %d %s' % ('Merge', q.qsize(), 'files left'))
 
 	def push(var):
 		while q.qsize() > 0:
@@ -61,6 +60,8 @@ class Object:
 			except Exception as e:
 				print('[%10s] %s' % ('Error', str(e)))
 
+			print('[%10s] %d %s' % ('Push', q.qsize(), 'files left'))
+
 	def pull(var):
 		while q.qsize() > 0:
 			# init
@@ -77,6 +78,8 @@ class Object:
 					obj.title = obj.title[:obj.title.rfind('.')]
 				except Exception as e:
 					print('[%10s] %s' % ('Error', str(e)))
+
+			print('[%10s] %d %s' % ('Pull', q.qsize(), 'files left'))
 
 def next(mode, auto, password):
 	# var

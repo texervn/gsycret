@@ -28,25 +28,34 @@ def upload(var):
 
 # OAuth
 def auth():
-	print('[%10s] %s' % ('Auth', 'Google API'))
+	print('[%10s] %s' % ('OAuth', 'Start'))
 
 	# var
 	global drive
 
-	# init
-	try:
-		gauth = GoogleAuth(settings_file='settings.yaml')
-	except Exception as e:
-		print('[%10s] %s %s' % ('Error', 'Drive.auth()', str(e)))
-		exit()
+	# OAuth
+	gauth = GoogleAuth()
+	gauth.LoadCredentialsFile('mycreds.txt')
 
-	try:
-		gauth.ServiceAuth()
-	except Exception as e:
-		print('[%10s] %s %s' % ('Error', 'Drive.auth()', str(e)))
-		exit()
+	# load failed
+	if gauth.credentials is None:
+		gauth.LocalWebserverAuth()
+	# refresh if expired
+	elif gauth.access_token_expired:
+		try:
+			gauth.Refresh()
+		except:
+			gauth.LocalWebserverAuth()
+	else:
+		gauth.Authorize()
+
+	# save current credentials
+	gauth.SaveCredentialsFile('mycreds.txt')
 
 	drive = GoogleDrive(gauth)
+
+	print('[%10s] %s' % ('OAuth', 'Done'))
+
 
 def merge(source, destination):
 	# var
