@@ -9,11 +9,11 @@
 ### Steps
 * Clone this project
     ```
-    git clone https://github.com/noname0930/gdrive-scripts.git
+    git clone https://github.com/noname0930/gsycret.git
     ```
 * Move to the folder
     ```
-    cd gdrive-scripts
+    cd gsycret
     ```
 * Apply and download Google Drive API key
 * Rename the json file from Google to ```client_secrets.json```
@@ -22,7 +22,7 @@
 ##### Basic  
 * push
     ```
-        python3 backup.py -m push -s /home/$USER -d <google_folder_id>
+    python3 backup.py -m push -s /home/$USER -d <google_folder_id>
     ```
 * pull
     ```
