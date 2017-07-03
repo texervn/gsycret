@@ -1,7 +1,5 @@
 import argparse
 
-import argparse
-
 # constant
 __version__ = '1.0'
 __description__ = 'gsycret - script for google drive api with encryption'
@@ -43,6 +41,13 @@ def parse_argv():
 	parser_pull.add_argument('--password', action='store', help='password for decryption')
 	parser_pull.add_argument('--auto', action='store_true', help='automatic decryption', default=False)
 	parser_pull.add_argument('--threads_num', action='store', help='number of threads', type=int, default=4)
+
+	# merge
+	parser_merge = subparsers.add_parser('merge')
+	parser_merge.add_argument('source')
+	parser_merge.add_argument('destination')
+	parser_merge.add_argument('--auto', action='store_true', help='automatic encryption and decryption', default=False)
+	parser_merge.add_argument('--threads_num', action='store', help='number of threads', type=int, default=4)
 
 	results = parser.parse_args()
 
