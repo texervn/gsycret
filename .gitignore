@@ -6,7 +6,7 @@ mycreds.txt
 *.json
 
 # module
-module/__pycache__/
+gsycret/__pycache__/
 
 # temp folder
 temp/*
