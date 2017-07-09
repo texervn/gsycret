@@ -22,8 +22,8 @@ def parse_argv():
 
 	# sub parser
 	subparsers = parser.add_subparsers(
-		dest='mode',
-		help='mode help'
+		dest='command',
+		help='command help'
 	)
 	subparsers.required = True
 
