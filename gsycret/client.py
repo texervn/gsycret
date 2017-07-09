@@ -9,6 +9,7 @@ import threading
 # custom module
 from gsycret.task import Task
 from gsycret.drive import Drive
+from gsycret.settings import *
 
 # constant
 __temp__ = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)) + '/temp/'
@@ -39,6 +40,7 @@ class Client:
 			t = self.q.get()
 			self.drive.download(t.id, __temp__, t.title)
 			self.drive.upload(t.dst, __temp__, t.title)
+			os.remove(file_pattern.format(path=__temp__, title=t.title))
 
 	def push(self):
 		while self.q.qsize() > 0:

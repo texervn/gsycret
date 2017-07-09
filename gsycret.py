@@ -1,6 +1,6 @@
-from module.cli import *
-from module.match import *
-from module.client import *
+from gsycret.cli import *
+from gsycret.match import *
+from gsycret.client import *
 
 def main():
 	# var

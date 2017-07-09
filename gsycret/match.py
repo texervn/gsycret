@@ -6,14 +6,7 @@ import os
 # module
 from gsycret.task import Task
 from gsycret.drive import Drive
-
-# constant
-__temp__ = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)) + '/temp/'
-
-# pattern
-ls_pattern = '"{id}" in parents and trashed = false'
-log_pattern = 'match.{func}: {msg}'
-file_pattern = '{path}/{title}'
+from gsycret.settings import *
 
 class Match:
 	def __init__(self):

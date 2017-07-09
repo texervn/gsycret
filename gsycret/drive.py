@@ -6,11 +6,7 @@ from pydrive.drive import GoogleDrive
 
 # module
 from gsycret.task import Task
-
-# pattern
-ls_pattern = '"{id}" in parents and trashed = false'
-log_pattern = 'drive.{func}: {msg}'
-file_pattern = '{path}/{title}'
+from gsycret.settings import *
 
 class Drive:
 	def __init__(self):
@@ -43,50 +39,27 @@ class Drive:
 		# init
 		self.drive = GoogleDrive(gauth)
 
-		# log
-		print(log_pattern.format(func='auth', msg='done'))
-
 	def ls(self, id):
-		# log
-		print(log_pattern.format(
-			func = 'ls',
-			msg = id
-		))
-
+		self.log('ls', id)
 		try:
 			return self.drive.ListFile({'q': ls_pattern.format(id=id)}).GetList()
 		except Exception as e:
-			print(log_pattern.format(
-				func = 'ls',
-				msg = str(e)
-			))
+			self.log('ls', str(e))
 
 	def download(self, id, path, title):
-		# log
-		print(log_pattern.format(
-			func = 'download',
-			msg = title
-		))
-
+		self.log('download', title)
 		try:
 			file = self.drive.CreateFile({'id': id})
 			file.GetContentFile(file_pattern.format(
+				module = 'drive',
 				path = path,
 				title = title
 			))
 		except Exception as e:
-			print(log_pattern.format(
-				func = 'download',
-				msg = str(e)
-			))
+			self.log('download', str(e))
 
 	def upload(self, id, path, title):
-		# log
-		print(log_pattern.format(
-			func = 'upload',
-			msg = title
-		))
-
+		self.log('upload', title)
 		try:
 			file = self.drive.CreateFile({
 				'title': title, 
@@ -101,10 +74,7 @@ class Drive:
 			))
 			file.Upload()
 		except Exception as e:
-			print(log_pattern.format(
-				func = 'upload',
-				msg = str(e)
-			))
+			self.log('upload', str(e))
 
 	def mkdir(self, id, title):
 		folder = self.drive.CreateFile({
@@ -114,6 +84,13 @@ class Drive:
 		})
 		folder.Upload()
 		return folder
+
+	def log(self, func, msg):
+		print(log_pattern.format(
+			module = 'drive',
+			func = func,
+			msg = msg
+		))
 
 # rename
 drive = Drive()
