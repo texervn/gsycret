@@ -9,16 +9,20 @@ import threading
 # custom module
 from gsycret.task import Task
 from gsycret.drive import Drive
+from gsycret.crypto import Crypto
 from gsycret.settings import *
 
 # constant
 __temp__ = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)) + '/temp/'
 
 class Client:
-	def __init__(self, q, threads_num):
-		self.q = queue.Queue()
+	def __init__(self, args):
 		self.drive = Drive()
-		self.threads_num = threads_num
+		self.crypto = Crypto()
+		self.q = queue.Queue()
+		self.threads_num = args['threads_num']
+		self.password = args['password']
+		self.auto = args['auto']
 
 	def run(self, command):
 		# init
@@ -39,15 +43,34 @@ class Client:
 		while self.q.qsize() > 0:
 			t = self.q.get()
 			self.drive.download(t.id, __temp__, t.title)
+			
+			# crypto
+			if self.auto:
+				self.crypto.decrypt(__temp__, t.title, t.src)
+				self.crypto.encrypt(__temp__, t.title, t.dst)
+			
 			self.drive.upload(t.dst, __temp__, t.title)
 			os.remove(file_pattern.format(path=__temp__, title=t.title))
 
 	def push(self):
 		while self.q.qsize() > 0:
 			t = self.q.get()
+
+			# crypto
+			if self.auto:
+				self.crypto.encrypt(t.src, t.title, t.dst)
+			elif self.password != None:
+				self.crypto.encrypt(t.src, t.title, self.password)
+			
 			self.drive.upload(t.dst, t.src, t.title)
 
 	def pull(self):
 		while self.q.qsize() > 0:
 			t = self.q.get()
 			self.drive.download(t.id, t.dst, t.title)
+			
+			# crypto
+			if self.auto:
+				self.crypto.decrypt(t.dst, t.title, t.src)
+			elif self.password != None:
+				self.crypto.decrypt(t.dst, t.title, self.password, t.dst)
