@@ -1,10 +1,10 @@
 # gsycret
-> Scripts for syncing files between personal computer and google drive
+> script for google drive with encryption
 
 ### Requirement
-* Python3
-* Pydrive
-* Google Drive API key
+* python3
+* pydrive
+* google drive api key
 
 ### Steps
 * Clone this project
@@ -22,15 +22,15 @@
 ##### Basic  
 * push
     ```
-    python3 backup.py -m push -s /home/$USER -d <google_folder_id>
+    python3 gsycret.py push <local> <gdrive_folder_id>
     ```
 * pull
     ```
-    python3 backup.py -m pull -s <google_folder_id> -d /home/$USER
+    python3 gsycret.py pull <gdrive_folder_id> <local>
     ```
 * merge
     ```
-    python3 backup.py -m merge -s <google_folder_id> -d <google_folder_id>
+    python3 gsycret.py merge <src_folder_id> <dst_folder_id>
     ```
 
 ##### Advanced
@@ -38,9 +38,6 @@
 | Arguments | Help | Others |
 | ----- | ----- | ----- |
 | -h, --help | show this help message and exit | |
-| -m {push,pull,merge} | mode choices | |
-| -s S | source folder | |
-| -d D | destination folder | |
 | --password PASSWORD | password for {encrypt,decrypt} | Optional |
 | --auto | auto {encrypt,decrypt} files by parent google_folder_id | Optional |
 | --threads_num THREADS_NUM | number of threads | Optional, Default = 4 |
