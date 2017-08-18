@@ -42,7 +42,13 @@ class Drive:
 	def ls(self, id):
 		self.log('ls', id)
 		try:
-			return self.drive.ListFile({'q': ls_pattern.format(id=id)}).GetList()
+			return self.drive.ListFile({
+				'q': ls_pattern.format(id=id), 
+				'corpora': 'teamDrive', 
+				'includeTeamDriveItems': True,
+				'supportsTeamDrives': True,
+				'teamDriveId': '0AAJJDwLb5PkxUk9PVA'
+			}).GetList()
 		except Exception as e:
 			self.log('ls', str(e))
 
