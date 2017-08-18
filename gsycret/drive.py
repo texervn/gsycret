@@ -43,11 +43,7 @@ class Drive:
 		self.log('ls', id)
 		try:
 			return self.drive.ListFile({
-				'q': ls_pattern.format(id=id), 
-				'corpora': 'teamDrive', 
-				'includeTeamDriveItems': True,
-				'supportsTeamDrives': True,
-				'teamDriveId': '0AAJJDwLb5PkxUk9PVA'
+				'q': ls_pattern.format(id=id)
 			}).GetList()
 		except Exception as e:
 			self.log('ls', str(e))
@@ -73,6 +69,7 @@ class Drive:
 					'kind': 'drive#fileLink', 
 					'id': id
 				}]
+				#'supportsTeamDrives': True
 			})
 			file.SetContentFile(file_pattern.format(
 				path = path,
