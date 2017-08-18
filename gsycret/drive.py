@@ -5,7 +5,7 @@ from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 
 # module
-from gsycret.task import Task
+from gsycret.task import *
 from gsycret.settings import *
 
 class Drive:
@@ -39,6 +39,8 @@ class Drive:
 		# init
 		self.drive = GoogleDrive(gauth)
 
+		self.log('auth', 'done')
+
 	def ls(self, id):
 		self.log('ls', id)
 		try:
@@ -69,7 +71,6 @@ class Drive:
 					'kind': 'drive#fileLink', 
 					'id': id
 				}]
-				#'supportsTeamDrives': True
 			})
 			file.SetContentFile(file_pattern.format(
 				path = path,

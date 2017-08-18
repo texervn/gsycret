@@ -7,9 +7,9 @@ import queue
 import threading
 
 # custom module
-from gsycret.task import Task
-from gsycret.drive import Drive
-from gsycret.crypto import Crypto
+from gsycret.task import *
+from gsycret.drive import *
+from gsycret.crypto import *
 from gsycret.settings import *
 
 # constant
@@ -17,7 +17,7 @@ __temp__ = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardi
 
 class Client:
 	def __init__(self, args):
-		self.drive = Drive()
+		self.drive = drive
 		self.crypto = Crypto()
 		self.q = queue.Queue()
 		self.threads_num = args['threads_num']

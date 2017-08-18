@@ -76,3 +76,6 @@ class Crypto:
 			func = func,
 			msg = msg
 		)) 
+
+# rename
+crypto = Crypto()
