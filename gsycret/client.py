@@ -73,8 +73,4 @@ class Client:
 			if self.auto:
 				self.crypto.decrypt(t.dst, t.title, t.src)
 			elif self.password != None:
-<<<<<<< HEAD
 				self.crypto.decrypt(t.dst, t.title, self.password, t.dst)
-=======
-				self.crypto.decrypt(t.dst, t.title, self.password, t.dst)
->>>>>>> fa4c71d8d52ea87f1bf8b607ca2b9c1da13c906b

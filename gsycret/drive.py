@@ -23,10 +23,6 @@ class Drive:
 
 		# load cache failed
 		if gauth.credentials is None:
-<<<<<<< HEAD
-=======
-#			print(gauth.GetAuthUrl())
->>>>>>> fa4c71d8d52ea87f1bf8b607ca2b9c1da13c906b
 			gauth.CommandLineAuth()
 		# refresh if expired
 		elif gauth.access_token_expired:
