@@ -4,13 +4,13 @@ from __future__ import print_function
 import os
 
 # module
-from gsycret.task import Task
-from gsycret.drive import Drive
+from gsycret.task import *
+from gsycret.drive import *
 from gsycret.settings import *
 
 class Match:
 	def __init__(self):
-		self.drive = Drive()
+		self.drive = drive
 
 	def merge(self, src, dst):
 		# var
