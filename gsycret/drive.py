@@ -23,13 +23,13 @@ class Drive:
 
 		# load cache failed
 		if gauth.credentials is None:
-			gauth.LocalWebserverAuth()
+			gauth.CommandLineAuth()
 		# refresh if expired
 		elif gauth.access_token_expired:
 			try:
 				gauth.Refresh()
 			except:
-				gauth.LocalWebserverAuth()
+				gauth.CommandLineAuth()
 		else:
 			gauth.Authorize()
 
