@@ -5,7 +5,7 @@ from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 
 # module
-from gsycret.task import Task
+from gsycret.task import *
 from gsycret.settings import *
 
 class Drive:
@@ -23,13 +23,14 @@ class Drive:
 
 		# load cache failed
 		if gauth.credentials is None:
-			gauth.LocalWebserverAuth()
+#			print(gauth.GetAuthUrl())
+			gauth.CommandLineAuth()
 		# refresh if expired
 		elif gauth.access_token_expired:
 			try:
 				gauth.Refresh()
 			except:
-				gauth.LocalWebserverAuth()
+				gauth.CommandLineAuth()
 		else:
 			gauth.Authorize()
 
@@ -39,10 +40,14 @@ class Drive:
 		# init
 		self.drive = GoogleDrive(gauth)
 
+		self.log('auth', 'done')
+
 	def ls(self, id):
 		self.log('ls', id)
 		try:
-			return self.drive.ListFile({'q': ls_pattern.format(id=id)}).GetList()
+			return self.drive.ListFile({
+				'q': ls_pattern.format(id=id)
+			}).GetList()
 		except Exception as e:
 			self.log('ls', str(e))
 

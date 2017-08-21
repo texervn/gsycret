@@ -5,7 +5,7 @@ from gsycret.client import *
 def main():
 	# var
 	args = parse_argv()
-	client = Client(None, args['threads_num'])
+	client = Client(args)
 	
 	print(args)
 
