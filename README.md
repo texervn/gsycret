@@ -3,20 +3,30 @@
 
 ### Requirement
 * python3
-* pydrive
-* google drive api key
+* [pydrive](https://github.com/noname0930/PyDrive.git)
 
 ### Steps
-* Clone this project
-    ```
-    git clone https://github.com/noname0930/gsycret.git
-    ```
-* Move to the folder
-    ```
-    cd gsycret
-    ```
-* Apply and download Google Drive API key
-* Rename the json file from Google to ```client_secrets.json```
+* pydrive
+    * clone and move to pydrive 
+        ```
+        git clone https://github.com/noname0930/PyDrive.git
+        cd Pydrive
+        ```
+    * install pydrive
+        ```
+        python3 setup.py install
+        ```
+   
+* gsycret
+    * clone and move to gsycret
+        ```
+        git clone https://github.com/noname0930/gsycret.git
+        cd gsycret
+        ```
+        
+* Goto [Google API console](https://console.cloud.google.com/apis) and apply Google Drive key
+* Move your api key to gsycret folder
+* Rename the api key file from Google to ```client_secrets.json```
 
 ### Usages
 ##### Basic  
@@ -53,4 +63,4 @@
 - [X] error message
 
 ### Version
-V1.3
+V1.4
