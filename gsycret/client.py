@@ -6,6 +6,8 @@ import time
 import queue
 import threading
 
+import concurrent.futures
+
 # custom module
 from gsycret.task import *
 from gsycret.drive import *
@@ -17,7 +19,7 @@ __temp__ = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardi
 
 class Merge:
 	def __init__(self):
-		self.q = queue.Queue()
+		self.tasks = []
 		self.drive = drive
 		self.crypto = Crypto()
 		
@@ -26,38 +28,42 @@ class Merge:
 		dst_files = self.drive.ls(kwargs['dst'])
 
 		for i in src_files:
-			# folder
 			if i['mimeType'] == 'application/vnd.google-apps.folder':
-				if any(j for j in dst_files if j['title'] == i['title']):
+				# find folder
+				try:
 					temp = next(j for j in dst_files if j['title'] == i['title'])
-					self.merge(i['id'], temp['id'])
-				else:
+				except:
 					temp = self.drive.mkdir(dst, i['title'])
-					self.merge(i['id'], temp['id'])
-			# not folder
-			elif not any(j for j in dst_files if j['title'] == i['title'] or j['title'][:j['title'].rfind('.')] == i['title']):
-				self.q.push(Task({
-					'id': i['id'],
-					'title': i['title'],
-					'src': None,
-					'dst': kwargs['dst']
-				}))
+				# recursive
+				self.init(i['id'], temp['id'])
 
-	def run(self):
-		while self.q.qsize() > 0:
-			t = self.q.get()
-			self.drive.download(t.id, __temp__, t.title)
-			
-			# crypto
-			if self.auto:
-				self.crypto.decrypt(__temp__, t.title, t.src)
-				self.crypto.encrypt(__temp__, t.title, t.dst)
-			
-			self.drive.upload(t.dst, __temp__, t.title)
-			os.remove(file_pattern.format(
-				path = __temp__, 
-				title = t.title)
-			)
+			elif not any(j for j in dst_files if j['title'] == i['title']):
+				self.tasks.append(Task(
+					id = i['id'],
+					src = None,
+					dst = kwargs['dst'],
+					title = i['title']
+				))
+
+	def next(self, task, **kwargs):
+		self.drive.download(task.id, __temp__, task.title)
+		
+		"""
+		# crypto
+		if self.auto:
+			self.crypto.decrypt(__temp__, t.title, t.src)
+			self.crypto.encrypt(__temp__, t.title, t.dst)
+		"""
+		
+		self.drive.upload(task.dst, __temp__, task.title)
+		os.remove(file_pattern.format(
+			path = __temp__, 
+			title = task.title)
+		)
+
+	def run(self, **kwargs):
+		with concurrent.futures.ThreadPoolExecutor(max_workers = kwargs['threads_num']) as executor:
+			futures = executor.map(self.next, self.tasks, [kwargs] * len(self.tasks))
 
 class Push:
 	def __init__(self):
@@ -93,12 +99,14 @@ class Push:
 		while self.q.qsize() > 0:
 			t = self.q.get()
 
+			"""
 			# crypto
 			if self.auto:
 				self.crypto.encrypt(t.src, t.title, t.dst)
 			elif self.password != None:
 				self.crypto.encrypt(t.src, t.title, self.password)
-			
+			"""
+
 			self.drive.upload(t.dst, t.src, t.title)
 
 class Pull:
@@ -142,11 +150,13 @@ class Pull:
 			t = self.q.get()
 			self.drive.download(t.id, t.dst, t.title)
 			
+			"""
 			# crypto
 			if kwargs['auto']:
 				self.crypto.decrypt(t.dst, t.title, t.src)
 			elif kwargs['password'] != None:
 				self.crypto.decrypt(t.dst, t.title, self.password, t.dst)
+			"""
 
 	def run(self, **kwargs):
 		# init
