@@ -32,20 +32,25 @@ def parse_argv():
 	parser_push.add_argument('source')
 	parser_push.add_argument('destination')
 	parser_push.add_argument(
+		'-r', '--recursive',
+		action = 'store_true',
+		help = 'copy directories recursively'
+	)
+	parser_push.add_argument(
 		'-p', '--password', 
-		action='store', 
-		help='password for encryption'
+		action = 'store', 
+		help = 'password for encryption'
 	)
 	parser_push.add_argument(
 		'-a', '--auto', 
-		action='store_true', 
-		help='automatic encryption', 
-		default=False
+		action = 'store_true', 
+		help = 'automatic encryption', 
+		default = False
 	)
 	parser_push.add_argument(
 		'-t', '--threads_num', 
-		action='store', 
-		help='number of threads', 
+		action = 'store', 
+		help = 'number of threads', 
 		type=int, 
 		default=4
 	)
@@ -56,21 +61,21 @@ def parse_argv():
 	parser_pull.add_argument('destination')
 	parser_pull.add_argument(
 		'-p', '--password', 
-		action='store', 
-		help='password for decryption'
+		action = 'store', 
+		help = 'password for decryption'
 	)
 	parser_pull.add_argument(
 		'-a', '--auto', 
-		action='store_true', 
-		help='automatic decryption', 
-		default=False
+		action = 'store_true', 
+		help = 'automatic decryption', 
+		default = False
 	)
 	parser_pull.add_argument(
 		'-t', '--threads_num', 
-		action='store', 
-		help='number of threads', 
-		type=int, 
-		default=4
+		action = 'store', 
+		help = 'number of threads', 
+		type = int, 
+		default = 4
 	)
 
 	# merge
@@ -79,18 +84,18 @@ def parse_argv():
 	parser_merge.add_argument('destination')
 	parser_merge.add_argument(
 		'-a', '--auto', 
-		action='store_true', 
-		help='automatic encryption and decryption', 
-		default=False
+		action = 'store_true', 
+		help = 'automatic encryption and decryption', 
+		default = False
 	)
 	parser_merge.add_argument(
 		'-t', '--threads_num', 
-		action='store', 
-		help='number of threads', 
-		type=int, 
-		default=4
+		action = 'store', 
+		help = 'number of threads', 
+		type = int, 
+		default = 4
 	)
 
 	results = parser.parse_args()
 
-	return results.__dict__
+	return results

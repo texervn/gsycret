@@ -45,7 +45,7 @@ class Drive:
 		self.log('ls', id)
 		try:
 			return self.drive.ListFile({
-				'q': ls_pattern.format(id=id)
+				'q': ls_pattern.format(id = id)
 			}).GetList()
 		except Exception as e:
 			self.log('ls', str(e))
