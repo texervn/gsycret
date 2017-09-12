@@ -1,0 +1,3 @@
+[submodule "PyDrive"]
+	path = PyDrive
+	url = git@github.com:noname0930/PyDrive.git
